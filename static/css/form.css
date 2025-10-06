@@ -1,0 +1,253 @@
+@import url("https://fonts.googleapis.com/css2?family=League+Spartan:wght@400;600;700&display=swap");
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "League Spartan", sans-serif;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* ===== Container ===== */
+.container {
+  background: #fff;
+  padding: 2rem 2.5rem;
+  border-radius: 20px;
+  width: 400px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+/* ===== Toggle Buttons ===== */
+.toggle-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.toggle-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  border: none;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  background: #eee;
+  color: #555;
+  transition: all 0.3s ease;
+}
+
+.toggle-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.toggle-btn.active {
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3);
+}
+
+.toggle-btn:hover {
+  transform: scale(1.05);
+}
+/* ----- Form Toggle Buttons ----- */
+#user,
+#admin {
+  border-radius: 24px;
+}
+
+/* ===== Forms ===== */
+.user-form,
+.admin-form {
+  display: none;
+  transition: all 0.5s ease-in-out;
+}
+
+.admin-form {
+  display: none;
+}
+
+.user-form.active,
+.admin-form.active {
+  display: block;
+}
+
+/* ===== Input Fields ===== */
+.input-field {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.input-field input {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  font-size: 1rem;
+  background: transparent;
+  outline: none;
+  color: #333;
+}
+
+.input-field i.fa {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  color: #777;
+  font-size: 1rem;
+}
+
+.input-field .underline {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 2px;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  transition: width 0.3s ease;
+}
+
+.input-field input:focus ~ .underline {
+  width: 100%;
+}
+
+/* Eye icon for password */
+.input-field .ri-eye-off-fill,
+.input-field .ri-eye-fill {
+  position: absolute;
+  top: 12px;
+  right: 10px;
+  cursor: pointer;
+  color: #777;
+}
+
+/* ===== Forgot Password ===== */
+.forgot-password {
+  text-align: right;
+  margin-bottom: 1.5rem;
+}
+
+.forgot-password a {
+  text-decoration: none;
+  color: #6a11cb;
+  font-size: 0.9rem;
+  transition: 0.3s;
+}
+
+.forgot-password a:hover {
+  color: #2575fc;
+}
+
+/* ===== Login Button ===== */
+.login-button {
+  width: 100%;
+  padding: 0.8rem;
+  border: none;
+  border-radius: 30px;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.login-button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+}
+
+/* Social login container */
+.social-login {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.social-login span {
+  display: block;
+  margin-bottom: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Icon container */
+.icons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Each icon */
+.icons a {
+  width: 45px;
+  height: 45px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #f5f5f5;
+  transition: 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.icons a svg {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.3s ease;
+}
+
+/* Hover effects */
+.icons a:hover {
+  transform: scale(1.1) translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.icons a:hover svg {
+  transform: scale(1.15);
+}
+
+/* Optional brand backgrounds */
+.icons a.google {
+  background: #fff;
+}
+.icons a.facebook {
+  background: #3b5998;
+}
+.icons a.twitter {
+  background: #1da1f2;
+}
+.icons a.linkedin {
+  background: #0077b5;
+}
+
+.icons a.facebook svg,
+.icons a.twitter svg,
+.icons a.linkedin svg {
+  fill: #fff;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .container {
+    width: 90%;
+    padding: 1.8rem 1.2rem;
+  }
+  .toggle-buttons {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+}
