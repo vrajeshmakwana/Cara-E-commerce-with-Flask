@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cara Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet" />
+
+    <style>
+        :root {
+            --primary-color: #088178;
+        }
+
+        /* Custom toggle logic */
+        #profile-toggle:checked+label .chevron-icon {
+            transform: rotate(180deg);
+        }
+
+        #profile-toggle:checked~.dropdown-menu-custom {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateY(0) scale(1) !important;
+        }
+
+        .dropdown-link:hover {
+            background-color: #f9fafb;
+        }
+
+        .dropdown-link:hover svg {
+            stroke: #3b82f6 !important;
+
+        }
+
+        .dropdown-link.text-danger:hover {
+            background-color: #fef2f2 !important;
+            /* light red background */
+            color: #dc2626 !important;
+            /* red text */
+        }
+
+        .dropdown-link.text-danger:hover svg {
+            stroke: #dc2626 !important;
+            /* red icon stroke */
+        }
+
+
+
+        .sidebar {
+            background: #E3E6F3;
+            border-right: 1px solid #ccc;
+        }
+
+
+
+        .nav-link.active,
+        .nav-link:hover {
+            background-color: var(--primary-color);
+            color: white !important;
+        }
+
+        .nav-link {
+            color: #1a1a1a;
+        }
+
+        .card-hover:hover {
+            transform: scale(1.02);
+            transition: all 0.3s ease;
+        }
+
+        .stats-card {
+            border-radius: 10px;
+            border: none;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        #ahover {
+            transition: all 0.5s ease-in-out;
+        }
+
+        #ahover:hover i {
+            /* background-color: #088178; */
+            margin-left: 5px;
+        }
+    </style>
+    <script>
+        function conf(sno) {
+            let msg = confirm("Are you Sure You want to Delete these Product?")
+            if (msg) {
+                window.location.href = `/delete/${sno}`
+            }
+
+        }
+    </script>
+</head>
+
+{% if success %}
+<script>
+    alert("Record Deleted Successfully")
+    window.location.href = "http://127.0.0.1:5000/admindashboard"
+</script>
+
+{% endif %}
+
+
+
+<body>
+    <!-- ================== Header Section Starts =================== -->
+    <!-- Bootstrap-Compatible Header -->
+    <header class="w-100 bg-white border-bottom shadow-sm sticky-top z-3">
+        <div class="container" style="max-width: 1200px;">
+            <div class="d-flex justify-content-between align-items-center" style="height: 4rem;">
+
+                <!-- Logo -->
+                <div class="d-flex align-items-center">
+                    <a href="#" class="fw-bold fs-4 text-decoration-none" style="
+          background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;">
+                        <img src="/static/images/logo.png" alt="Error" style="height: 2rem;">
+                    </a>
+                </div>
+
+                <!-- Profile Dropdown -->
+                <div class="position-relative">
+                    <input type="checkbox" id="profile-toggle" class="d-none">
+                    <label for="profile-toggle"
+                        class="d-flex align-items-center gap-2 px-2 py-1 rounded cursor-pointer user-select-none"
+                        role="button" tabindex="0" style="transition: all 0.2s ease;">
+
+                        <!-- Profile Icon -->
+                        <div class="d-flex align-items-center justify-content-center rounded-circle text-white fw-semibold"
+                            style="width: 2rem; height: 2rem; background: linear-gradient(135deg, #3b82f6, #8b5cf6);">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
+                            </svg>
+                        </div>
+
+                        <!-- Chevron Icon -->
+                        <div class="chevron-icon"
+                            style="width: 1rem; height: 1rem; position: relative; top: -4px; transition: transform 0.2s ease;">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="w-100 h-100">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+                    </label>
+
+                    <!-- Dropdown Menu -->
+                    <div class="dropdown-menu-custom position-absolute end-0 mt-2 p-2 rounded bg-white border shadow"
+                        style="width: 12rem; opacity: 0; visibility: hidden; transform: translateY(-10px) scale(0.95); transition: all 0.2s ease; transform-origin: top right;">
+                        <a href="#profile"
+                            class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none text-dark rounded small dropdown-link">
+                            <div style="width: 1rem; height: 1rem;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="w-100 h-100">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                            </div>
+                            Profile
+                        </a>
+                        <a href="#settings"
+                            class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none text-dark rounded small dropdown-link">
+                            <div style="width: 1rem; height: 1rem;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="w-100 h-100">
+                                    <circle cx="12" cy="12" r="3"></circle>
+                                    <path
+                                        d="m12 1 2.828 2.828A4 4 0 0 1 16 6.828V9a4 4 0 0 1-1.172 2.828L12 14.828 9.172 12A4 4 0 0 1 8 9V6.828a4 4 0 0 1 1.172-2.828L12 1Z">
+                                    </path>
+                                    <path d="m21 21-6-6m6 6v-4.8m0 4.8h-4.8"></path>
+                                </svg>
+                            </div>
+                            Settings
+                        </a>
+                        <div class="border-top my-1"></div>
+                        <a href="/adminlogout"
+                            class="d-flex align-items-center gap-2 px-3 py-2 text-decoration-none text-danger rounded small dropdown-link">
+                            <div style="width: 1rem; height: 1rem;">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="w-100 h-100">
+                                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                                    <polyline points="16,17 21,12 16,7"></polyline>
+                                    <line x1="21" y1="12" x2="9" y2="12"></line>
+                                </svg>
+                            </div>
+                            Logout
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- ================== Header Section Ends =================== -->
+
+    <div class="d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar" style="width: 250px; min-height: calc(100vh - 65px);">
+            <div class="p-3">
+                <div class="mb-4">
+                    <h5 class="text-dark">Dashboard</h5>
+                </div>
+                <ul class="nav flex-column gap-2">
+                    <li class="nav-item">
+                        <a href="#" class="nav-link active rounded">
+                            <i class="ri-dashboard-line me-2"></i> Overview
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/ProductForm" class="nav-link rounded">
+                            <i class="ri-shopping-bag-line me-2"></i> Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/productDetail" class="nav-link rounded">
+                            <i class="ri-pie-chart-line me-2"></i> ProductList
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/orders" class="nav-link rounded">
+                            <i class="ri-shopping-cart-line me-2"></i> Orders
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/customers" class="nav-link rounded">
+                            <i class="ri-user-line me-2"></i> Customers
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/logs" class="nav-link rounded">
+                            <i class="ri-file-3-line"></i> Logs
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-grow-1 p-4 bg-light">
+            <!-- Stats Cards -->
+            <h1>Welcome {{name}}</h1>
+            <div class="row g-4 mb-4">
+                <div class="col-md-3">
+                    <div class="card stats-card card-hover bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Total Orders</h6>
+                                    <h3 class="mb-0">1,254</h3>
+                                </div>
+                                <i class="ri-shopping-cart-line ri-2x"></i>
+                            </div>
+                            <p class="small mb-0 mt-2">
+                                <i class="ri-arrow-up-line"></i> 12% increase
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card card-hover"
+                        style="background-color: var(--primary-color); color: white;">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Revenue</h6>
+                                    <h3 class="mb-0">$45,678</h3>
+                                </div>
+                                <i class="ri-money-dollar-circle-line ri-2x"></i>
+                            </div>
+                            <p class="small mb-0 mt-2">
+                                <i class="ri-arrow-up-line"></i> 8% increase
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card card-hover bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Products</h6>
+                                    <h3 class="mb-0">456</h3>
+                                </div>
+                                <i class="ri-stack-line ri-2x"></i>
+                            </div>
+                            <p class="small mb-0 mt-2">
+                                <i class="ri-arrow-up-line"></i> 5% increase
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card stats-card card-hover bg-info text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h6 class="card-title">Customers</h6>
+                                    <h3 class="mb-0">2,789</h3>
+                                </div>
+                                <i class="ri-user-line ri-2x"></i>
+                            </div>
+                            <p class="small mb-0 mt-2">
+                                <i class="ri-arrow-up-line"></i> 15% increase
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+            <!-- Recent Orders -->
+            <div class="card">
+                <div class="card-header bg-white py-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Recent Orders</h5>
+
+                        <a href="/addproduct"> <button class="btn btn-sm"
+                                style="background-color: var(--primary-color); color: white;">
+                                <i class="ri-add-fill"></i> Add Product
+                            </button></a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive d-none  d-xl-block">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Product ID</th>
+                                    <th>Product Name</th>
+                                    <th>Amount</th>
+                                    <th>InStock</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    {% for product in products %}
+
+                                    <td>{{product.Product_ID}}</td>
+                                    <td>{{product.Product_name}}</td>
+                                    <td>₹{{product.Product_Price | round(2)}}</td>
+                                    <td>{{product.InStock}}</td>
+                                    <td><span class="badge bg-success"
+                                            id="statusBadge{{product.Sr_No}}">Completed</span></td>
+                                    <td>
+                                        <button class="btn btn-sm  mx-2  btn-primary action-btn" data-bs-toggle="modal"
+                                            data-bs-target="#productModal{{product.Sr_No}}">
+                                            <i class="ri-eye-line"></i> View
+                                        </button>
+                                        <a href="/edit/{{product.Sr_No}}"> <button type="button"
+                                                class="btn btn-sm btn-warning"><i class="ri-edit-line"></i>
+                                                Edit</button></a>
+                                        <button class="btn btn-sm mx-2  btn-danger action-btn"
+                                            onclick="conf('{{product.Sr_No}}')">
+                                            <i class="ri-delete-bin-line"></i> Delete
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <select class="form-select form-select-sm statusDropdown"
+                                            data-id="{{product.Sr_No}}" style="width: 160px;">
+                                            <option value="completed" selected>Completed</option>
+                                            <option value="pending">Pending</option>
+                                            <option value="processing">Processing</option>
+                                            <option value="out-for-delivery">Out For Delivery</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <!-- View Modal  -->
+                                <div class="modal fade" id="productModal{{product.Sr_No}}" tabindex="-1"
+                                    aria-labelledby="productModalLabel{{product.Sr_No}}" aria-hidden="true">
+                                    <div class="modal-dialog modal-lg">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="productModalLabel{{product.Sr_No}}">Product
+                                                    Details</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="row">
+                                                    <div class="col-md-6 mb-3">
+                                                        <img src="{{product.Product_Image}}" alt="Product Image"
+                                                            class="img-fluid product-image w-100">
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <h2 class="mb-3">{{product.Product_name}}</h2>
+                                                        <p class="product-price mb-3">₹{{product.Product_Price |
+                                                            round(2)}}</p>
+                                                        <p class="mb-3">A stylish and sophisticated timepiece that
+                                                            combines classic
+                                                            design
+                                                            with modern functionality.</p>
+                                                        <div class="mb-3">
+                                                            <label for="quantity" class="form-label">Quantity:</label>
+                                                            <input type="number" class="form-control quantity-input"
+                                                                id="quantity" value="1" min="1">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="InStock" class="form-label">InStock:
+                                                                {{product.InStock}}</label>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary">Add to Cart</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- ==================== Responsive Tables  for Smaller Screens ============================ -->
+                    <div class="responsive-table d-md-none">
+                        {% for product in products %}
+                        <div class="responsive-record">
+                            <div class="row">
+                                <div class="col-6 column-name">Product ID</div>
+                                <div class="col-6">{{product.Product_ID}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 column-name">Product Name</div>
+                                <div class="col-6">{{product.Product_name}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 column-name">Amount</div>
+                                <div class="col-6">₹{{product.Product_Price | round(2)}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 column-name">InStock</div>
+                                <div class="col-6">{{product.InStock}}</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6 column-name">Status</div>
+                                <div class="col-6"><span class="badge bg-success">Completed</span></div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-12 d-flex justify-content-between">
+                                    <div class="col-6 column-name">Actions</div>
+                                    <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#productModal"><i class="ri-eye-line"></i> View</button>
+                                    <a href="/edit/{{product.Sr_No}}"> <button type="button"
+                                            class="btn btn-sm btn-warning"><i class="ri-edit-line"></i>
+                                            Edit</button></a>
+                                    <button class="btn btn-sm btn-danger"><i class="ri-delete-bin-line"></i>
+                                        Delete</button>
+                                </div>
+                            </div>
+                            <hr>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+
+        let statusDropdown = document.querySelectorAll(".statusDropdown")
+
+        statusDropdown.forEach(dropdown => {
+
+            dropdown.addEventListener("change", function () {
+                // Get the record ID
+                const recordID = dropdown.getAttribute("data-id")
+                // Get the selected value
+                const selectedStatus = dropdown.value;
+                let statusBadge = document.getElementById(`statusBadge${recordID}`)
+                console.log(recordID, selectedStatus);
+
+
+                switch (selectedStatus) {
+
+                    case "out-for-delivery":
+                        statusBadge.textContent = selectedStatus.replace(/-/g, " ")
+                        statusBadge.classList.remove("bg-warning")
+                        statusBadge.classList.remove("bg-danger")
+                        statusBadge.classList.remove("bg-primary")
+                        statusBadge.classList.remove("text-dark")
+                        statusBadge.classList.add("bg-success")
+                        statusBadge.style.textTransform = "capitalize"
+                        break
+                    case "pending":
+                        statusBadge.textContent = selectedStatus
+                        statusBadge.classList.remove("bg-success")
+                        statusBadge.classList.remove("bg-danger")
+                        statusBadge.classList.add("bg-warning")
+                        statusBadge.classList.add("text-dark")
+                        statusBadge.style.textTransform = "capitalize"
+                        break;
+
+                    case "processing":
+                        statusBadge.textContent = selectedStatus
+                        statusBadge.classList.remove("bg-success")
+                        statusBadge.classList.remove("bg-success")
+                        statusBadge.classList.remove("bg-warning")
+                        statusBadge.classList.remove("bg-danger")
+                        statusBadge.classList.add("bg-primary")
+                        statusBadge.classList.remove("text-dark")
+                        statusBadge.style.textTransform = "capitalize"
+                        break;
+
+
+                    case "cancelled":
+                        statusBadge.textContent = selectedStatus
+                        statusBadge.classList.remove("bg-success")
+                        statusBadge.classList.remove("bg-warning")
+                        statusBadge.classList.remove("bg-primary")
+                        statusBadge.classList.add("bg-danger")
+                        statusBadge.classList.remove("text-dark")
+                        statusBadge.style.textTransform = "capitalize"
+                        break;
+
+
+                    default:
+                        statusBadge.textContent = "Completed"
+                        statusBadge.classList.remove("bg-warning")
+                        statusBadge.classList.remove("bg-primary")
+                        statusBadge.classList.remove("bg-danger")
+                        statusBadge.classList.remove("text-dark")
+                        statusBadge.classList.add("bg-success")
+                        statusBadge.style.textTransform = "capitalize"
+                        break;
+
+                }
+
+            })
+
+        })
+
+    </script>
+</body>
+
+</html>

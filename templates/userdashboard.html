@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Website</title>
+    <link rel="stylesheet" href=" {{ url_for('static', filename='css/userdashboard.css') }}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.0.0/fonts/remixicon.css" rel="stylesheet" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+
+</head>
+
+
+
+<body>
+
+
+
+    </head>
+
+    <body>
+        <header class="dashboard-header">
+            <!-- Logo Section -->
+            <div class="logo-container">
+                <a href="#" class="logo">
+                    <img src="/static/images/logo.png" alt="Company Logo" />
+                </a>
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-container">
+                <div class="search-wrapper">
+
+                    <input type="text" id="search" hx-trigger="input changed delay:500ms" hx-get="/search"
+                        hx-target="#autocomplete-results" class="search-input" name="q" autocomplete="off"
+                        placeholder="Search products, orders..." aria-label="Search" />
+                    <button class="search-icon" aria-label="Search">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <!-- Search Autocomplete Container -->
+                <div id="autocomplete-results" class="autocomplete-list">
+                    <!-- Autocomplete results will be populated here -->
+                </div>
+            </div>
+            <div>
+                <ul id="navbar">
+                    <li><a class="active" href="index.html">Home</a></li>
+                    <li><a href="/shop/{{user.Token}}">Shop</a></li>
+                    <li><a href="/blog/{{user.Token}}">Blog</a></li>
+                    <li><a href="/about/{{user.Token}}">About</a></li>
+                    <li><a href="/contact/{{user.Token}}">Contact</a></li>
+                    <li>
+
+                        <div id="count"><span class="font" id="update">0</span></div>
+                        <a href="/cart/{{user.Token}}" id="cart1"><i class="ri-shopping-bag-line"></i></a>
+                    </li>
+                    <i class="ri-close-circle-fill" id="close"></i></a>
+                </ul>
+            </div>
+            <div class="mobile">
+
+                <div id="count1"><span class="font">0</span></div> <a href="cart.html"><i
+                        class="ri-shopping-bag-line"></i></a>
+                <i id="bar" class="ri-menu-fill"></i>
+            </div>
+
+            <!-- Profile Section -->
+            <div class="profile-container">
+                <button class="profile-icon" id="profile-toggle" aria-label="User profile" aria-expanded="false"
+                    aria-controls="profile-dropdown">
+                    {% if user.auth_provider != 'local' and user.Picture %}
+                    <!-- Show Google profile picture -->
+                    <img src="{{ user.Picture }}" alt="Profile" class="avatar">
+                    {% else %}
+                    <img src="/static/images/user.webp" alt="User">
+                    {% endif %}
+                    <!-- <i class="fas fa-user-circle"></i> -->
+                </button>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <div class="dropdown-header">
+                        {% if user %}
+
+                        <p class="user-name">{{user.Username}} Makwana</p>
+                        <p class="user-email">{{user.Email}}</p>
+
+
+                        {% endif %}
+                    </div>
+                    <ul class="dropdown-menu">
+                        <li><a href="/profile/{{id}}"><i class="fas fa-user"></i> View Profile</a></li>
+                        <li><a href="/userorder/{{id}}"><i class="fas fa-shopping-bag"></i> Orders</a></li>
+                        <li><a href="/settings/{{id}}"><i class="fas fa-cog"></i> Settings</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/logout/{{id}}" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+        <!-- ================== Header Section Ends =================== -->
+
+        <!-- ================== Hero Section Starts =================== -->
+        <section id="hero">
+            <h4>Trade-in-offer</h4>
+            <h2>Super value deals</h2>
+            <h1>On all products</h1>
+            <p>Save more with coupons & up to 70% off!</p>
+            <button>Shop Now</button>
+        </section>
+        <!-- ================== Hero Section Ends =================== -->
+
+        <!-- ================== Feature Section Starts =================== -->
+        <section id="feature" class="section-p1">
+            <div class="fe-box">
+                <img src="/static/images/features/f1.png" alt="Error">
+                <h6>Free Shipping</h6>
+            </div>
+            <div class="fe-box">
+                <img src="/static/images/features/f2.png" alt="Error">
+                <h6>Online Order</h6>
+            </div>
+            <div class="fe-box">
+                <img src="/static/images/features/f3.png" alt="Error">
+                <h6>Save Money</h6>
+            </div>
+            <div class="fe-box">
+                <img src="/static/images/features/f4.png" alt="Error">
+                <h6>Promotions</h6>
+            </div>
+            <div class="fe-box">
+                <img src="/static/images/features/f5.png" alt="Error">
+                <h6>Happy Sell</h6>
+            </div>
+            <div class="fe-box">
+                <img src="/static/images/features/f6.png" alt="Error">
+                <h6>F24/7 Support</h6>
+            </div>
+        </section>
+        <!-- ================== Feature Section Ends =================== -->
+
+        <!-- ================== Product Section Starts =================== -->
+        <section id="product1" class="section-p1">
+            <h2>Featured Products</h2>
+            <p>Summer Collection New Modern Design</p>
+            <div class="pro-container">
+                {% if data %}
+                {% for product in data %}
+                <div data-product-id="{{product.Product_ID}}"
+                    class="pro {% if not product.available %} disabled {% endif %}">
+                    <img src="{{product.Product_Image}}" alt="Error">
+                    <div class="des">
+                        <span>addidas</span>
+                        {% if not product.available %}
+                        <div class="overlay">Unavailable</div>
+                        {% else %}
+                        <div class="stock-badge">In Stock</div>
+
+                        {% endif %}
+                        <h5>{{product.Product_name}}</h5>
+                        <div class="star">
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                            <i class="ri-star-fill"></i>
+                        </div>
+                        <h4>₹{{product.Product_Price | round(2)}}</h4>
+                    </div>
+                    <a href="#"><i class="ri-shopping-cart-line" onclick="AddToCart(this,'{{product.Product_ID}}')"
+                            data-product-id="{{product.Product_ID}}" data-user-id="{{user.Sr_No}}"
+                            data-product-image="{{product.Product_Image}}" data-product-name="{{product.Product_name}}"
+                            data-product-price="{{product.Product_Price | round(2)}}" data-product-quantity="1"
+                            id="cart"></i></a>
+                </div>
+                {% endfor %}
+                {% else %}
+                <script>
+                    alert("Failed to connect to the database Sorry for the Inconvenience Please try again later...")
+                </script>
+                <h2 style="margin: auto;">No Record Found</h2>
+                {% endif %}
+
+            </div>
+        </section>
+        <!-- ================== Product Section Ends =================== -->
+
+        <!-- ================== Banner1 Section Starts =================== -->
+        <section id="banner" class="section-m1">
+            <h4>Repair Services</h4>
+            <h2>Up to <span>70% Off</span> - All T-Shirts & Accessories</h2>
+            <button class="normal">Explore More</button>
+        </section>
+        <!-- ================== Banner1 Section Ends =================== -->
+
+        <!-- ================== Product2 Section Starts =================== -->
+        <section id="product1" class="section-p1 p2">
+            <h2>New Arrivals</h2>
+            <p>Summer Collection New Modern Design</p>
+            <div class="pro-container pro2">
+                {% block body %}
+
+                {% endblock body %}
+            </div>
+        </section>
+        <!-- ================== Product2 Section Ends =================== -->
+
+        <!-- ================== Banner2 Section Starts =================== -->
+        <section id="sm-banner" class="section-p1">
+            <div class="banner-box">
+                <h4>Crazy Deals</h4>
+                <h2>buy 1 get 1 free</h2>
+                <span>The best classic dress is on sale at cara</span>
+                <button class="white">Learn More</button>
+            </div>
+
+            <div class="banner-box">
+                <h4>Spring/Summer</h4>
+                <h2>Upcoming Season</h2>
+                <span>The best classic dress is on sale at cara</span>
+                <button class="white">Collection</button>
+            </div>
+        </section>
+        <!-- ================== Banner2 Section Ends =================== -->
+        <!-- ================== Banner3 Section Starts =================== -->
+        <section id="banner3">
+            <div class="banner-box1">
+                <h2>Seasonal Sale</h2>
+                <h3>Winter Collection -50% OFF</h3>
+            </div>
+
+            <div class="banner-box1">
+                <h2>New Footwear Collection</h2>
+                <h3>Spring/Summer 2023</h3>
+            </div>
+
+            <div class="banner-box1">
+                <h2>T-Shirts</h2>
+                <h3>New Trendy Prints</h3>
+            </div>
+        </section>
+        <!-- ================== Banner3 Section Ends =================== -->
+        <!-- ================== Newsletter Section Starts =================== -->
+        <section id="newsletter" class="section-p1 section-m1">
+            <div class="newstext">
+                <h4>Sign Up For Newsletter</h4>
+                <p>Get E-mail updates about our latest shop and <span>special offers.</span></p>
+            </div>
+            <div class="form">
+                <input type="text" placeholder="Please Enter Your E-mail" required>
+                <button type="submit" class="normal">Sign Up</button>
+            </div>
+        </section>
+        <!-- ================== Newsletter Section Ends =================== -->
+        <!-- ================== Footer Section Starts =================== -->
+
+        <footer class="section-p1">
+            <div class="col">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" class="logo" alt="Error">
+                <h4>Contact</h4>
+                <p><strong>Address:</strong> 562 Wellignton Road Street 32. San Francisco</p>
+                <p><strong>Phone:</strong> +01 2222 365/(+91) 01 2345 6789</p>
+                <p><strong>Hours:</strong> 10:00 -18:00.Mon - Sat</p>
+                <div class="follow">
+                    <h4>Follow us</h4>
+                    <div class="icon">
+                        <a href="https:/www.facebook.com" target="_blank"><i class="ri-facebook-fill"></i></a>
+                        <a href="https:/www.instagram.com" target="_blank"><i class="ri-instagram-fill"></i></a>
+                        <a href="https:/www.youtube.com" target="_blank"><i class="ri-youtube-fill"></i></a>
+                        <a href="https:/www.twitter.com" target="_blank"><i class="ri-twitter-fill"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col col1">
+                <h4>About</h4>
+                <a href="#">About Us</a>
+                <a href="#">Delivery Information</a>
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms & Conditions</a>
+                <a href="#">Contact Us</a>
+            </div>
+
+            <div class="col col1">
+                <h4>My Account</h4>
+                <a href="#">Sign in</a>
+                <a href="#">View Cart</a>
+                <a href="#">My Wishlist</a>
+                <a href="#">Track My Order</a>
+                <a href="#">Help</a>
+            </div>
+
+            <div class="col install">
+                <h4>Install App</h4>
+                <p>From App Store or Google Play</p>
+                <div class="row">
+                    <img src="/static/images/pay/app.jpg" alt="Error">
+                    <img src="/static/images/pay/play.jpg" alt="Error">
+                </div>
+                <p>Secured Payment Gateways</p>
+                <img src="/static/images/pay/pay.png" alt="Error">
+            </div>
+
+        </footer>
+        <div class="copyright">
+            <p>@ 2021, Tech2 etc - HTML CSS Ecommerce Template </p>
+        </div>
+
+        <!-- ================== Footer Section Ends =================== -->
+        <script src="https://cdn.lordicon.com/lordicon.js"></script>
+        <script src="{{ url_for('static',filename= 'js/script.js') }}"></script>
+
+
+    </body>
+
+</html>

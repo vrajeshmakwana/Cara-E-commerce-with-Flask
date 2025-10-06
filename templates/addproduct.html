@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .dropzone {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .dropzone.dragover {
+            border-color: #4f46e5;
+            background-color: #eef2ff;
+        }
+
+        .csv-dropzone {
+            transition: all 0.3s ease-in-out;
+        }
+
+        .csv-dropzone.dragover {
+            border-color: #10b981;
+            background-color: #ecfdf5;
+        }
+    </style>
+</head>
+{% if success %}
+<script>
+    alert("{{success}}")
+    window.location.href = "http://127.0.0.1:5000/admindashboard"
+</script>
+{% endif %}
+
+<body class="bg-gray-50 p-8">
+    <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+        <h2 class="text-3xl font-semibold text-center text-gray-700 mb-6">Product Details</h2>
+
+        <form action="/addproduct" method="POST" enctype="multipart/form-data">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <!-- Product ID -->
+                <div>
+                    <label for="product-id" class="block text-gray-700 font-medium">Product ID</label>
+                    <input type="text" id="product-id" name="product-id" required
+                        class="mt-2 px-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+
+                <!-- Product Name -->
+                <div>
+                    <label for="product-name" class="block text-gray-700 font-medium">Product Name</label>
+                    <input type="text" id="product-name" name="product-name" required
+                        class="mt-2 px-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+
+                <!-- Product Price -->
+                <div>
+                    <label for="product-price" class="block text-gray-700 font-medium">Product Price (₹)</label>
+                    <input type="number" id="product-price" name="product-price" required step="0.01"
+                        class="mt-2 px-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+
+                <!-- Stock Quantity -->
+                <div>
+                    <label for="stock-quantity" class="block text-gray-700 font-medium">Stock Quantity</label>
+                    <input type="number" id="stock-quantity" name="stock-quantity" required
+                        class="mt-2 px-4 py-2 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                </div>
+
+                <!-- Multi-Image Uploader with Previews -->
+                <div class="col-span-1 sm:col-span-2">
+                    <label class="block text-gray-700 font-medium">Upload Images</label>
+                    <div id="dropzone"
+                        class="dropzone border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center text-gray-500 mt-2 hover:bg-gray-50">
+                        <!-- Preview Section for multiple images -->
+                        <div id="preview" class="mt-4 flex flex-wrap gap-4 justify-center hidden"></div>
+
+                        <!-- Default Upload Icon -->
+                        <div id="default-upload" class="flex flex-col items-center justify-center">
+                            <svg class="mx-auto size-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor"
+                                aria-hidden="true" data-slot="icon">
+                                <path fill-rule="evenodd"
+                                    d="M1.5 6a2.25 2.25 0 0 1 2.25-2.25h16.5A2.25 2.25 0 0 1 22.5 6v12a2.25 2.25 0 0 1-2.25 2.25H3.75A2.25 2.25 0 0 1 1.5 18V6Zm3 10.06V18c0 .414.336.75.75.75h16.5A.75.75 0 0 0 21 18v-1.94l-2.69-2.689a1.5 1.5 0 0 0-2.12 0l-.88.879.97.97a.75.75 0 1 1-1.06 1.06l-5.16-5.159a1.5 1.5 0 0 0-2.12 0L3 16.061Zm10.125-7.81a1.125 1.125 0 1 1 2.25 0 1.125 1.125 0 0 1-2.25 0Z"
+                                    clip-rule="evenodd" />
+                            </svg>
+                            <p class="text-sm mt-2">Drag & drop your images here</p>
+                            <p class="text-sm mt-1">or</p>
+                            <label for="fileInput" class="text-blue-600 hover:underline cursor-pointer mt-1">
+                                Upload a file
+                            </label>
+                        </div>
+
+                        <input id="fileInput" type="file" name="file" accept="image/*" class="hidden" multiple>
+                    </div>
+                </div>
+
+
+
+
+
+
+
+
+            </div>
+
+
+
+
+            <!-- Submit Button -->
+            <div class="mt-6 text-center">
+                <button type="submit"
+                    class="bg-blue-600 text-white px-6 py-3 rounded-lg shadow hover:bg-blue-700 disabled:opacity-50">
+                    Add Product
+                </button>
+            </div>
+        </form>
+
+        <!-- Divider with OR text -->
+        <div class="relative flex items-center justify-center mt-8 mb-6">
+            <div class="border-t border-gray-300 flex-grow"></div>
+            <h3 class="mx-4 text-lg font-medium text-gray-500">OR</h3>
+            <div class="border-t border-gray-300 flex-grow"></div>
+        </div>
+
+        <!-- CSV Bulk Upload Section -->
+        <div class="mt-4">
+            <h3 class="text-xl font-semibold text-center text-gray-700 mb-4">Bulk Upload Products</h3>
+            <form action="/bulkupload" method="POST" enctype="multipart/form-data">
+                <div class="col-span-1 sm:col-span-2">
+                    <label class="block text-gray-700 font-medium mb-2">Upload CSV File</label>
+                    <div id="csvDropzone"
+                        class="csv-dropzone border-2 border-dashed border-gray-300 rounded-md p-6 flex flex-col items-center justify-center text-gray-500 mt-2 hover:bg-gray-50">
+                        <!-- CSV Icon -->
+                        <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto size-12 text-green-300" fill="none"
+                            viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                        <!-- CSV File Name Display -->
+                        <div id="csvFileInfo" class="hidden mt-2 text-sm font-medium text-green-600"></div>
+
+                        <p class="text-sm mt-2">Drag & drop your CSV file here</p>
+                        <p class="text-sm mt-1">or</p>
+                        <label for="csvFileInput" class="text-green-500 hover:underline cursor-pointer mt-1">Select CSV
+                            file</label>
+                        <input id="csvFileInput" type="file" name="csvFile" accept=".csv" class="hidden">
+
+                        <p class="text-xs text-gray-400 mt-3">File must be in CSV format with columns: product-id,
+                            product-name, product-price, stock-quantity, image-url</p>
+                    </div>
+                </div>
+
+                <!-- Submit Button for CSV -->
+                <div class="mt-6 text-center">
+                    <button type="submit" id="uploadCsvBtn"
+                        class="bg-green-600 text-white px-6 py-3 rounded-lg shadow hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        disabled>
+                        Upload CSV
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('fileInput');
+            const previewContainer = document.getElementById('preview');
+            const defaultUpload = document.getElementById('default-upload');
+
+            fileInput.addEventListener('change', (event) => {
+                const files = event.target.files;
+                previewContainer.innerHTML = ''; // Clear old previews
+
+                if (files.length > 0) {
+                    defaultUpload.classList.add('hidden');
+                    previewContainer.classList.remove('hidden');
+
+                    Array.from(files).forEach(file => {
+                        if (file.type.startsWith('image/')) {
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                                const imgDiv = document.createElement('div');
+                                imgDiv.classList.add('relative', 'w-24', 'h-24', 'rounded-lg', 'overflow-hidden', 'shadow');
+
+                                const img = document.createElement('img');
+                                img.src = e.target.result;
+                                img.classList.add('w-full', 'h-full', 'object-cover');
+
+                                imgDiv.appendChild(img);
+                                previewContainer.appendChild(imgDiv);
+                            };
+                            reader.readAsDataURL(file);
+                        } else {
+                            alert('Please upload a valid image file.');
+                        }
+                    });
+                } else {
+                    defaultUpload.classList.remove('hidden');
+                    previewContainer.classList.add('hidden');
+                }
+            });
+
+            // CSV File Upload Handling
+            const csvDropzone = document.getElementById('csvDropzone');
+            const csvFileInput = document.getElementById('csvFileInput');
+            const csvFileInfo = document.getElementById('csvFileInfo');
+            const uploadCsvBtn = document.getElementById('uploadCsvBtn');
+
+            csvDropzone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                csvDropzone.classList.add('dragover');
+            });
+
+            csvDropzone.addEventListener('dragleave', () => {
+                csvDropzone.classList.remove('dragover');
+            });
+
+            csvDropzone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                csvDropzone.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                handleCsvFile(file);
+            });
+
+            csvFileInput.addEventListener('change', () => {
+                const file = csvFileInput.files[0];
+                handleCsvFile(file);
+            });
+
+            function handleCsvFile(file) {
+                if (file && file.name.endsWith('.csv')) {
+                    csvFileInfo.textContent = `File selected: ${file.name}`;
+                    csvFileInfo.classList.remove('hidden');
+                    uploadCsvBtn.disabled = false;
+                } else {
+                    alert('Please upload a valid CSV file.');
+                    csvFileInfo.classList.add('hidden');
+                    uploadCsvBtn.disabled = true;
+                    csvFileInput.value = '';
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>

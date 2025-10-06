@@ -1,0 +1,488 @@
+{% if success %}
+<script>
+    alert("{{success}}")
+    window.location.href = "http://127.0.0.1:5000/productDetail"
+</script>
+{% endif %}
+{% extends 'dash_inheritance.html' %}
+{% block body %}
+
+<style>
+    .color-circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .color-circle.selected {
+        border: 2px solid #000;
+    }
+
+    .color-circle.selected::after {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-weight: bold;
+    }
+
+    .size-btn.selected {
+        background-color: #088178;
+        color: white;
+    }
+
+    .image-preview {
+        width: 20%;
+        height: 200px;
+        background-color: #f3f4f6;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .image-preview img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+
+    .sub-image {
+        width: 100px;
+        height: 100px;
+        background-color: #f3f4f6;
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .sub-image img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+    }
+</style>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto py-8 px-4">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-8">
+            <h1 class="text-2xl font-bold mb-6 text-gray-800">Product Information Form</h1>
+
+            <form action="/productData" method="post" enctype="multipart/form-data" id="productForm">
+                <!-- Main Image Preview & Upload -->
+                <div>
+                    <label class="block font-semibold mb-2 text-left text-lg text-gray-700">Main Image</label>
+                    <div class="flex flex-col justify-self-start items-center gap-2">
+                        <div id="mainImagePreview"
+                            class="w-40 h-40 bg-gray-100 border-2 border-dashed border-gray-300 flex items-center justify-center rounded-lg mb-2 overflow-hidden">
+                            <span class="text-gray-400 text-sm" id="mainImagePlaceholder">No image chosen</span>
+                            <img id="mainImageTag" src="" alt="Main Image Preview"
+                                class="hidden w-full h-full object-cover" />
+                        </div>
+                        <label
+                            class="inline-block bg-blue-600 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-700 transition font-medium">
+                            Upload Image
+                            <input id="mainImageInput" name="mainImage" type="file" accept="image/*" class="hidden" />
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Sub Images -->
+                <div class="mb-6 mt-6">
+                    <label class="block text-left text-gray-700 text-lg font-bold mb-2">
+                        Sub Images
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-left text-gray-700 text-xs mb-1">Sub Image 1</label>
+                            <div class="sub-image" id="subImage1Preview">
+                                <i class="fas fa-image text-gray-400"></i>
+                            </div>
+                            <input type="file" id="subImage1" name="subImage[]" accept="image/*" class="hidden">
+                            <button type="button" onclick="document.getElementById('subImage1').click()"
+                                class="mt-2 flex justify-start bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                Upload
+                            </button>
+                        </div>
+                        <div>
+                            <label class="block text-left text-gray-700 text-xs mb-1">Sub Image 2</label>
+                            <div class="sub-image" id="subImage2Preview">
+                                <i class="fas fa-image text-gray-400"></i>
+                            </div>
+                            <input type="file" id="subImage2" name="subImage[]" accept="image/*" class="hidden">
+                            <button type="button" onclick="document.getElementById('subImage2').click()"
+                                class="mt-2 flex justify-start bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                Upload
+                            </button>
+                        </div>
+                        <div>
+                            <label class="block text-left text-gray-700 text-xs mb-1">Sub Image 3</label>
+                            <div class="sub-image" id="subImage3Preview">
+                                <i class="fas fa-image text-gray-400"></i>
+                            </div>
+                            <input type="file" id="subImage3" name="subImage[]" accept="image/*" class="hidden">
+                            <button type="button" onclick="document.getElementById('subImage3').click()"
+                                class="mt-2 flex justify-start bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                Upload
+                            </button>
+                        </div>
+                        <div>
+                            <label class="block text-left text-gray-700 text-xs mb-1">Sub Image 4</label>
+                            <div class="sub-image" id="subImage4Preview">
+                                <i class="fas fa-image text-gray-400"></i>
+                            </div>
+                            <input type="file" id="subImage4" name="subImage[]" accept="image/*" class="hidden">
+                            <button type="button" onclick="document.getElementById('subImage4').click()"
+                                class="mt-2 flex justify-start bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                Upload
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Size Buttons -->
+                <div class="mb-6">
+                    <label class="block text-left text-gray-700 text-sm font-bold mb-2">
+                        Available Sizes
+                    </label>
+                    <div class="flex flex-wrap gap-2">
+                        <label class="relative">
+                            <input type="checkbox" name="sizes[]" value="S" class="hidden peer">
+                            <span
+                                class="size-btn border border-gray-300 rounded-md px-4 py-2 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-gray-100 focus:outline-none">
+                                S
+                            </span>
+                        </label>
+                        <label class="relative">
+                            <input type="checkbox" name="sizes[]" value="M" class="hidden peer">
+                            <span
+                                class="size-btn border border-gray-300 rounded-md px-4 py-2 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-gray-100 focus:outline-none">
+                                M
+                            </span>
+                        </label>
+                        <label class="relative">
+                            <input type="checkbox" name="sizes[]" value="L" class="hidden peer">
+                            <span
+                                class="size-btn border border-gray-300 rounded-md px-4 py-2 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-gray-100 focus:outline-none">
+                                L
+                            </span>
+                        </label>
+                        <label class="relative">
+                            <input type="checkbox" name="sizes[]" value="XL" class="hidden peer">
+                            <span
+                                class="size-btn border border-gray-300 rounded-md px-4 py-2 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-gray-100 focus:outline-none">
+                                XL
+                            </span>
+                        </label>
+                        <label class="relative">
+                            <input type="checkbox" name="sizes[]" value="XXL" class="hidden peer">
+                            <span
+                                class="size-btn border border-gray-300 rounded-md px-4 py-2 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-gray-100 focus:outline-none">
+                                XXL
+                            </span>
+                        </label>
+                        <label class="relative">
+                            <input type="checkbox" name="sizes[]" value="XXXL" class="hidden peer">
+                            <span
+                                class="size-btn border border-gray-300 rounded-md px-4 py-2 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-gray-100 focus:outline-none">
+                                XXXL
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Color Circles -->
+                <div class="mb-6">
+                    <label class="block text-left text-gray-700 text-sm font-bold mb-2">
+                        Available Colors
+                    </label>
+                    <div class="flex flex-wrap gap-4">
+                        <label class="flex flex-col items-center cursor-pointer">
+                            <input type="checkbox" name="colors[]" value="Green" class="hidden peer">
+                            <div class="color-circle w-8 h-8 rounded-full border-2 border-transparent peer-checked:border-green-600"
+                                style="background-color: #4CAF50;"></div>
+                            <span class="text-xs mt-1">Green</span>
+                        </label>
+                        <label class="flex flex-col items-center cursor-pointer">
+                            <input type="checkbox" name="colors[]" value="Black" class="hidden peer">
+                            <div class="color-circle w-8 h-8 rounded-full border-2 border-transparent peer-checked:border-black"
+                                style="background-color: #000000;"></div>
+                            <span class="text-xs mt-1">Black</span>
+                        </label>
+                        <label class="flex flex-col items-center cursor-pointer">
+                            <input type="checkbox" name="colors[]" value="Red" class="hidden peer">
+                            <div class="color-circle w-8 h-8 rounded-full border-2 border-transparent peer-checked:border-red-600"
+                                style="background-color: #F44336;"></div>
+                            <span class="text-xs mt-1">Red</span>
+                        </label>
+                        <label class="flex flex-col items-center cursor-pointer">
+                            <input type="checkbox" name="colors[]" value="Yellow" class="hidden peer">
+                            <div class="color-circle w-8 h-8 rounded-full border-2 border-transparent peer-checked:border-yellow-600"
+                                style="background-color: #FFEB3B;"></div>
+                            <span class="text-xs mt-1">Yellow</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Price Fields -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="discountedPrice">
+                            Product ID
+                        </label>
+                        <input type="number" id="discountedPrice" name="id" min="0" step="0.01"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="originalPrice">
+                            Product Name
+                        </label>
+                        <input type="text" id="originalPrice" name="pname" min="0" step="0.01"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="discountedPrice">
+                            Discounted Price (₹)
+                        </label>
+                        <input type="number" id="discountedPrice" name="discountedPrice" min="0" step="0.01"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="originalPrice">
+                            Original Price (₹)
+                        </label>
+                        <input type="number" id="originalPrice" name="originalPrice" min="0" step="0.01"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                    </div>
+
+                </div>
+
+                <!-- Ratings -->
+                <div class="mb-6">
+                    <label class="block text-left text-gray-700 text-sm font-bold mb-2">
+                        Ratings
+                    </label>
+                    <div class="flex items-center">
+                        <div class="rating flex">
+                            <input type="hidden" name="rating" id="ratingInput" value="0">
+                            <i class="fas fa-star text-gray-300 cursor-pointer text-xl mr-1" data-rating="1"></i>
+                            <i class="fas fa-star text-gray-300 cursor-pointer text-xl mr-1" data-rating="2"></i>
+                            <i class="fas fa-star text-gray-300 cursor-pointer text-xl mr-1" data-rating="3"></i>
+                            <i class="fas fa-star text-gray-300 cursor-pointer text-xl mr-1" data-rating="4"></i>
+                            <i class="fas fa-star text-gray-300 cursor-pointer text-xl" data-rating="5"></i>
+                        </div>
+                        <span class="ml-2 text-gray-600" id="ratingValue">0/5</span>
+                    </div>
+                </div>
+                <!-- Product Description -->
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-left  font-bold mb-2" for="productDescription">
+                        Product Description
+                    </label>
+                    <textarea id="productDescription" name="productDescription" rows="4"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"></textarea>
+                </div>
+
+                <!-- SKU -->
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-left text-sm font-bold mb-2" for="sku">
+                        SKU
+                    </label>
+                    <input type="text" id="sku" name="sku"
+                        class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                </div>
+
+                <!-- Product Features -->
+                <div class="col-span-1 sm:col-span-2">
+                    <label for="new-feature" class="block text-left font-bold text-gray-700 ">Product
+                        Features</label>
+                    <div class="mt-2 flex gap-2">
+                        <input type="text" id="new-feature" placeholder="e.g., Breathable fabric"
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+                        <button type="button" id="add-feature-btn"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                            Add
+                        </button>
+                    </div>
+                    <ul id="features-list" class="mt-4 space-y-2"></ul>
+                    <input type="hidden" id="product-features" name="features">
+                </div>
+
+                <!-- Available -->
+                <div class="mb-6">
+                    <label class="block text-left text-gray-700  font-bold mb-2" for="available">
+                        Available
+                    </label>
+                    <select id="available" name="available"
+                        class="shadow  border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="flex items-center justify-center">
+                    <button type="submit"
+                        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Save Product
+                    </button>
+                    <button type="reset"
+                        class="bg-gray-500 mx-8 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                        Reset Form
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Main image upload and preview
+        const mainImageInput = document.getElementById("mainImageInput");
+        const mainImagePreview = document.getElementById("mainImagePreview");
+        const mainImageTag = document.getElementById("mainImageTag");
+        const mainImagePlaceholder = document.getElementById("mainImagePlaceholder");
+        mainImageInput.addEventListener("change", function () {
+            if (this.files && this.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    mainImageTag.src = e.target.result;
+                    mainImageTag.classList.remove("hidden");
+                    mainImagePlaceholder.classList.add("hidden");
+                };
+                reader.readAsDataURL(this.files[0]);
+            } else {
+                mainImageTag.classList.add("hidden");
+                mainImagePlaceholder.classList.remove("hidden");
+            }
+        });
+        // Image preview functionality
+        function setupImagePreview(inputId, previewId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+
+            input.addEventListener('change', function () {
+                if (this.files && this.files[0]) {
+                    const reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        preview.innerHTML = `<img src="${e.target.result}" alt="Preview">`;
+                    }
+
+                    reader.readAsDataURL(this.files[0]);
+                }
+            });
+        }
+        setupImagePreview('subImage1', 'subImage1Preview');
+        setupImagePreview('subImage2', 'subImage2Preview');
+        setupImagePreview('subImage3', 'subImage3Preview');
+        setupImagePreview('subImage4', 'subImage4Preview');
+
+        // Size selection
+        const sizeButtons = document.querySelectorAll('.size-btn');
+        sizeButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                this.classList.toggle('selected');
+            });
+        });
+
+        // Color selection
+        const colorCircles = document.querySelectorAll('.color-circle');
+        colorCircles.forEach(circle => {
+            circle.addEventListener('click', function () {
+                this.classList.toggle('selected');
+            });
+        });
+
+        // Rating functionality
+        const stars = document.querySelectorAll('.rating .fa-star');
+        const ratingValue = document.getElementById('ratingValue');
+        const ratingInput = document.getElementById("ratingInput")
+        let currentRating = 0;
+
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function () {
+                const rating = this.getAttribute('data-rating');
+                highlightStars(rating);
+            });
+
+            star.addEventListener('mouseout', function () {
+                highlightStars(currentRating);
+            });
+
+            star.addEventListener('click', function () {
+                currentRating = this.getAttribute('data-rating');
+                ratingValue.textContent = `${currentRating}/5`;
+                ratingInput.value = currentRating
+
+                highlightStars(currentRating);
+            });
+        });
+
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const starRating = star.getAttribute('data-rating');
+                if (starRating <= rating) {
+                    star.classList.remove('text-gray-300');
+                    star.classList.add('text-yellow-400');
+                } else {
+                    star.classList.remove('text-yellow-400');
+                    star.classList.add('text-gray-300');
+                }
+            });
+        }
+
+        function renderFeaturesList() {
+            featuresList.innerHTML = '';
+            features.forEach((feature, index) => {
+                const li = document.createElement('li');
+                li.classList.add('flex', 'items-center', 'justify-between', 'bg-gray-50', 'p-3', 'rounded-lg', 'border', 'border-gray-200');
+                li.innerHTML = `
+                        <span>${feature}</span>
+                        <button type="button" class="remove-feature text-red-500 hover:text-red-700" data-index="${index}">
+                            <svg class="size-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    `;
+                featuresList.appendChild(li);
+            });
+
+            document.querySelectorAll('.remove-feature').forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const indexToRemove = event.currentTarget.dataset.index;
+                    features.splice(indexToRemove, 1);
+                    productFeaturesInput.value = JSON.stringify(features);
+                    renderFeaturesList();
+                });
+            });
+        }
+        // Product features functionality
+        const newFeatureInput = document.getElementById('new-feature');
+        const addFeatureBtn = document.getElementById('add-feature-btn');
+        const featuresList = document.getElementById('features-list');
+        const productFeaturesInput = document.getElementById('product-features');
+        let features = [];
+        addFeatureBtn.addEventListener('click', () => {
+
+            const featureText = newFeatureInput.value.trim();
+            if (featureText) {
+                features.push(featureText);
+                productFeaturesInput.value = JSON.stringify(features);
+                renderFeaturesList();  // Displaying entered values in the list
+                newFeatureInput.value = '';
+            }
+        });
+
+
+    </script>
+
+    {% endblock %}

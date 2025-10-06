@@ -1,0 +1,101 @@
+{% extends 'inheritance.html' %}
+
+
+{% block body %}
+
+<!-- ================== Hero Section Starts =================== -->
+
+<section id="page-header">
+    <h2>#cart</h2>
+    <p>Add your coupon code & Save upto 70%!</p>
+</section>
+
+<!-- ================== Hero Section Ends =================== -->
+
+<!-- ================== Cart Section Starts =================== -->
+
+<section id="cart" class="section-p1">
+
+    <table width="100%">
+        <thead>
+            <tr>
+                <td>Image</td>
+                <td>Product</td>
+                <td>Price</td>
+                <td>Quantity</td>
+                <td>Total</td>
+                <td>Remove</td>
+            </tr>
+        </thead>
+
+        <tbody id="table">
+            {% if product_data %}
+            {% for data in product_data %}
+            <tr id="row{{data.Product_ID}}">
+                <td id="RemoveData" data-label="Product-Image"><img src="{{data.Product_Image}}" alt="Error"></td>
+                <td id="RemoveData" data-label="Product-Detail"><span>{{data.Product_Name}}</span></td>
+                <td id="RemoveData" class="productPrice" data-label="Price">₹{{data.Product_Price |
+                    round(2)}}</td>
+                <td id="RemoveData" data-label="Quantity"><input type="number" data-pid="{{data.Product_ID}}"
+                        id="ProductQuantity" value="{{data.Product_Quantity}}" min="1" maxlength="1"> </td>
+                <td id="RemoveData" data-label="Total" class="productTotal{{data.Product_ID}}">₹{{data.Total |
+                    round(2)}}</td>
+                <td id="RemoveData" style="cursor: pointer;" data-label="Remove"><lord-icon
+                        data-pid="{{data.Product_ID}}" id="remove" src="https://cdn.lordicon.com/zxvuvcnc.json"
+                        trigger="hover" style="width:30px;height:30px">
+                    </lord-icon></td>
+            </tr>
+            {% endfor %}
+
+            {% else %}
+
+            <h3 id="msg">Your Cart is currently empty</h3>
+            {% endif %}
+
+        </tbody>
+    </table>
+</section>
+<!-- ================== Cart Section Ends =================== -->
+<!-- ================== Coupon Section Starts =================== -->
+
+<section id="cart-add" class="section-p1">
+    <div id="coupon">
+        <h3>Apply Coupon</h3>
+        <div>
+            <input type="text" placeholder="Enter Your Coupon No">
+            <button class="normal">Apply</button>
+        </div>
+    </div>
+    <div id="total">
+        <h3>Cart Total</h3>
+        <table>
+            <tr>
+                <td>Cart SubTotal</td>
+                <td id="proTot">₹{{total | round(2)}}</td>
+            </tr>
+
+            <tr>
+                <td>Shipping</td>
+                <td>Free</td>
+            </tr>
+
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong id="Carttotal">₹{{total | round(2)}}</strong></td>
+            </tr>
+        </table>
+
+        <center><button class="normal pay">
+                <a href="/checkout/{{token}}" style="text-decoration: none; color: #fff;">
+                    Proceed to checkout </a> </button>
+        </center>
+    </div>
+</section>
+
+<!-- ================== Coupon Section Ends =================== -->
+
+
+
+<script src="https://cdn.lordicon.com/lordicon.js"></script>
+<script src="/static/js/cart.js"></script>
+{% endblock %}

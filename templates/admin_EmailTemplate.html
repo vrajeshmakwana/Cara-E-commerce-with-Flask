@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cara Notification</title>
+</head>
+
+<body style="margin: 0; padding: 0; font-family: Inter, Arial, sans-serif; background-color: #f0f2f5;">
+
+    <!-- Main Container Table -->
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+        style="table-layout: fixed; background-color: #f0f2f5;">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="600"
+                    style="width: 100%; max-width: 600px; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+
+                    <!-- Header Section -->
+                    <tr>
+                        <td style="background-color: #e3e6f3; padding: 20px 30px;" align="center">
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                                <tr>
+                                    <td align="left">
+                                        <!-- Cara Logo - Add alt text for accessibility -->
+                                        <a href="https://yourwebsite.com" target="_blank"
+                                            style="text-decoration: none; ">
+                                            <img src="cid:logo" alt="Cara Logo" width="120"
+                                                style="display: block;background-color: #e3e6f3; border: 0;">
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <!-- Main Content Section -->
+                    <tr>
+                        <td style="padding: 30px 40px; color: #333333;">
+                            <h1 style="font-size: 28px; font-weight: 700; color: #1f2937; margin: 0 0 20px 0;">Security
+                                Alert</h1>
+                            <p style="font-size: 16px; line-height: 1.6; margin: 0 0 15px 0;">
+                                Hi Vrajesh,
+                            </p>
+                            <p style="font-size: 16px; line-height: 1.6; margin: 0 0 25px 0;">
+                                Someone just logged into your Admin account.If this wasn't you,
+                                we're here to help you take some simple steps to secure your account.
+                            </p>
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%"
+                                style="font-size: 16px; line-height: 1.6;">
+                                <tr>
+                                    <td style="padding: 5px 0;"><strong>Device:</strong> Lenovo Ideapad </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px 0;"><strong>Time:</strong> {{DateTime}}</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 5px 0;"><strong>Location:</strong> {{geoinfo}}</td>
+                                </tr>
+                            </table>
+
+                            <!-- Call-to-Action Button -->
+                            <table role="presentation" cellspacing="0" cellpadding="0" border="0"
+                                style="margin: 30px auto;">
+                                <tr>
+                                    <td style="background-color: #088178; border-radius: 6px;">
+                                        <a href="https://yourwebsite.com/secure-account" target="_blank"
+                                            style="display: inline-block; padding: 12px 25px; font-size: 16px; font-weight: bold; color: #ffffff; text-decoration: none; border-radius: 6px;">
+                                            Secure Your Account
+                                        </a>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="font-size: 14px; line-height: 1.6; color: #555555; margin: 0;">
+                                If this was you, you can ignore this email. If this was not you, please click the
+                                button above to secure your account immediately. To improve your account security
+                                we've enabled login alerts. We'll continue to notify you whenever your username and
+                                password
+                                are used to login from a new device or browser.
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- Footer Section -->
+                    <tr>
+                        <td style="background-color: #e3e6f3; padding: 25px 40px; text-align: center; color: #000;">
+                            <p style="font-size: 12px; line-height: 1.5; margin: 0 0 10px 0;">
+                                &copy; 2025 Cara. All rights reserved.
+                            </p>
+                            <p style="font-size: 12px; line-height: 1.5; margin: 0;">
+                                <a href="https://yourwebsite.com" target="_blank"
+                                    style="color:  #059669; text-decoration: none;">
+                                    This email was sent to verify your account security.
+                                </a>
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>
