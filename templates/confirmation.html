@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed - Cara</title>
+    <style>
+        /* ======== Success Tick marker ===== */
+        @keyframes pulse {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        .pulse-ring {
+            transform-origin: center;
+            animation: pulse 1.5s ease-out infinite;
+        }
+    </style>
+    <link rel="stylesheet" href="/static/css/orderconf.css">
+</head>
+
+<body>
+
+
+    {% if msg %}
+    <script>
+        alert("{{msg}}")
+    </script>
+    {% endif %}
+
+    {% if error %}
+    <script>
+        alert("{{error}}")
+    </script>
+    {% endif %}
+    <!-- Skeleton div classes -->
+    <!-- Skeleton Loading Screen -->
+    <div class="skeleton-loader">
+        <div class="skeleton-content">
+            <div class="skeleton-circle"></div>
+
+            <div class="skeleton-header">
+                <div class="skeleton-title"></div>
+                <div class="skeleton-subtitle"></div>
+            </div>
+
+            <div class="skeleton-progress"></div>
+            <div class="skeleton-steps">
+                <div class="skeleton-step"></div>
+                <div class="skeleton-step"></div>
+                <div class="skeleton-step"></div>
+                <div class="skeleton-step"></div>
+            </div>
+
+            <div class="skeleton-card">
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line medium"></div>
+                <div class="skeleton-line short"></div>
+            </div>
+
+            <div class="skeleton-card">
+                <div class="skeleton-line"></div>
+                <div class="skeleton-line short"></div>
+                <div class="skeleton-line medium"></div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <div class="success-animation">
+        <svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+                <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#34d399;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#10b981;stop-opacity:1" />
+                </linearGradient>
+                <filter id="softShadow">
+                    <feDropShadow dx="0" dy="6" stdDeviation="8" flood-opacity="0.25" flood-color="#10b981" />
+                </filter>
+            </defs>
+
+            <!-- Pulse effect -->
+            <circle class="pulse-ring" cx="100" cy="100" r="60" fill="none" stroke="#10b981" stroke-width="2"
+                opacity="0.5" />
+
+            <!-- Main circle -->
+            <g filter="url(#softShadow)">
+                <circle cx="100" cy="100" r="60" fill="url(#gradient)">
+                    <animate attributeName="r" values="0;60" dur="0.5s" fill="freeze" />
+                </circle>
+            </g>
+
+            <!-- Checkmark (draw animation) -->
+            <path d="M 60 100 L 85 125 L 140 70" fill="none" stroke="white" stroke-width="10" stroke-linecap="round"
+                stroke-linejoin="round" opacity="0">
+                <animate attributeName="opacity" values="0;1" dur="0.2s" begin="0.5s" fill="freeze" />
+                <animate attributeName="stroke-dasharray" values="0 150;150 0" dur="0.45s" begin="0.5s" fill="freeze" />
+            </path>
+        </svg>
+    </div>
+
+    <div class="container">
+        <div class="confirmation-header">
+            <h1>Order Confirmed!</h1>
+            <p>Thank you for shopping with us</p>
+        </div>
+
+        <div class="order-progress">
+            <div class="progress-bar">
+                <div class="progress"></div>
+            </div>
+            <div class="progress-steps">
+                <div class="step active">Confirmed</div>
+                <div class="step">Processing</div>
+                <div class="step">Shipped</div>
+                <div class="step">Delivered</div>
+            </div>
+        </div>
+
+        <div class="order-details">
+            <div class="order-section">
+                <h2>Order Information</h2>
+                <div class="detail-row">
+                    <span>Order ID:</span>
+                    <span class="highlight">{{session['oid']}}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Order Date:</span>
+                    <span id="orderDate">{{session['cdate'] }}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Estimated Delivery:</span>
+                    <span id="deliveryDate">{{session['ddate']}}</span>
+                </div>
+            </div>
+
+            <div class="order-section">
+                <h2>Items Ordered</h2>
+                <!-- Product Card 1 -->
+                {% for order in session["order_data"] %}
+                <div class="product-card">
+                    <div class="product-image">
+
+                        <img src="{{order['Product_Image']}}" alt="Wireless Earbuds">
+                    </div>
+                    <div class="product-details">
+                        <h3 class="product-name">{{order['Product_Name']}}</h3>
+                        <div class="product-attributes">
+                            <div class="product-attribute">
+                                Color: <span>Black</span>
+                            </div>
+                            <div class="product-attribute">
+                                Model: <span>XW-300</span>
+                            </div>
+                            <div class="product-attribute">
+                                SKU: <span>WE-39485</span>
+                            </div>
+                            <div class="product-attribute status-shipped">
+                                Shipped
+                            </div>
+                        </div>
+                        <div class="price-quantity">
+                            <div class="product-price">₹{{order['Product_Price']| int | default(0) | round(2)}}</div>
+                            <div class="product-quantity">Qty: {{order['Quantity']}}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="order-summary">
+                <div class="detail-row">
+                    <span>Subtotal:</span>
+                    <span>₹{{session['subtotal'] | int | default(0) | round(2)}}</span>
+                </div>
+                <div class="detail-row">
+                    <span>Shipping:</span>
+                    <span>Free Shipping</span>
+                </div>
+                <div class="detail-row total">
+                    <span>Total:</span>
+                    <span style="color: var(--primary-color);">₹{{session['total'] | int | default(0) |
+                        round(2)}}</span>
+                </div>
+            </div>
+
+            <div class="shipping-details">
+                {% if session['ship_data'] %}
+                <h2>Shipping Details</h2>
+                <p>{{session['ship_data']['Name']}}</p>
+                <p>{{session['ship_data']['Address']}}</p>
+                <p>Apt 4B</p>
+                <p>{{session['ship_data']['City']}} {{session['ship_data']['Postcode']}}</p>
+                <p>{{session['ship_data']['Country']}}</p>
+                {% endif %}
+            </div>
+
+            <div class="tracking-info">
+                <h2>Tracking Information</h2>
+                <p class="tracking-number">Tracking #: <span class="highlight">1Z999AA1234567890</span></p>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn track-order">Track Order</button>
+            <a class="btn continue-shopping" href="/dashboard/{{session['token']}}">Continue
+                Shopping</a>
+            <button class="btn print-order">Print Order Details</button>
+        </div>
+    </div>
+
+</body>
+
+</html>

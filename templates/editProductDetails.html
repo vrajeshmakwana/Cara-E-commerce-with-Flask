@@ -1,0 +1,495 @@
+{% extends 'dash_inheritance.html' %}
+
+{% block body %}
+{% if status %}
+<script>
+    alert("{{status}}")
+    window.location.href = "http://127.0.0.1:5000/productDetail"
+</script>
+{% endif %}
+<style>
+    .color-circle {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+    }
+
+    .color-circle.selected {
+        border: 2px solid #000;
+    }
+
+    .color-circle.selected::after {
+        content: '✓';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-weight: bold;
+    }
+</style>
+<main class="flex-1 p-8">
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">Edit Product</h2>
+        <div class="flex items-center space-x-4">
+            <button class="text-gray-600 hover:text-gray-900 focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0a3 3 0 00-6 0">
+                    </path>
+                </svg>
+            </button>
+            <div class="flex items-center space-x-2">
+                <img src="https://placehold.co/40x40/D1D5DB/1F2937?text=U" alt="User" class="w-10 h-10 rounded-full">
+                <span class="font-medium text-gray-800">User</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Information Form -->
+    <div class="bg-white p-6 rounded-xl shadow-lg">
+        <h3 class="text-xl font-semibold text-gray-800 mb-6">Product Information Form</h3>
+        <form id="editProductForm" action="/editProductDetails/{{data.variant[0].product_id}}"
+            enctype="multipart/form-data" method="post" class="space-y-6">
+
+            <!-- Product Images Section -->
+            <div>
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Product Images</h2>
+                <div class="grid grid-cols-1 md:grid-cols-1 gap-6 mb-6">
+                    <!-- Main Image upload -->
+                    <div
+                        class="flex flex-col items-center p-6 border-2 border-dashed border-gray-300 w-full h-auto rounded-xl bg-gray-50 relative">
+                        <input type="file" id="main-image-input" value="{{data.images[0].url}}" name="mainImage"
+                            accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer ">
+
+                        <img id="main-image-display" src="{{data.images[0].url}}" alt="Main Product Image"
+                            class=" h-[200px] w-[200px] object-cover rounded-lg">
+                        <div id="main-image-preview" class="flex flex-col items-center text-center">
+                            <i class="lucide lucide-image-plus w-16 h-16 text-gray-400 mb-2"></i>
+                            <span id="main-image-filename" class="text-gray-500 text-sm mb-4">No image chosen</span>
+                            <button type="button"
+                                class="flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white font-medium rounded-full hover:bg-blue-700 transition-colors shadow-lg pointer-events-none">
+                                <i class="lucide lucide-upload-cloud w-5 h-5"></i>
+                                Upload Main Image
+                            </button>
+                        </div>
+
+                    </div>
+
+
+                </div>
+                <!-- Sub Images grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 md:col-span-1">
+                    <div
+                        class="flex flex-col items-center p-4 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 relative group">
+                        <input type="file" value="{{data.images[1].url}}" id="sub-image-input-1" name="SubImage[]"
+                            accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+
+                        <div class="flex flex-col items-center  text-center">
+                            <i class="lucide lucide-image-plus w-10 h-10 text-gray-400 mb-2"></i>
+                            <span class="text-gray-500 text-xs mb-2">Sub Image 1</span>
+                            <button type="button"
+                                class="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded-full hover:bg-gray-300 transition-colors pointer-events-none">Upload</button>
+
+                        </div>
+                        <img id="sub-image-display-1" src="{{data.images[1].url}}" alt="Sub Product Image"
+                            class=" absolute inset-0 w-full h-full object-cover rounded-lg">
+
+                    </div>
+                    <div
+                        class="flex flex-col items-center p-4 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 relative group">
+                        <input type="file" id="sub-image-input-2" value="{{data.images[2].url}}" name="SubImage[]"
+                            accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                        <div class="flex flex-col items-center text-center">
+                            <i class="lucide lucide-image-plus w-10 h-10 text-gray-400 mb-2"></i>
+                            <span class="text-gray-500 text-xs mb-2">Sub Image 2</span>
+                            <button type="button"
+                                class="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded-full hover:bg-gray-300 transition-colors pointer-events-none">Upload</button>
+                        </div>
+                        <img id="sub-image-display-2" src="{{data.images[2].url}}" alt="Sub Product Image"
+                            class=" absolute inset-0 w-full h-full object-cover rounded-lg">
+                    </div>
+                    <div
+                        class="flex flex-col items-center p-4 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 relative group">
+                        <input type="file" id="sub-image-input-3" value="{{data.images[3].url}}" name="SubImage[]"
+                            accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                        <div class="flex flex-col items-center text-center">
+                            <i class="lucide lucide-image-plus w-10 h-10 text-gray-400 mb-2"></i>
+                            <span class="text-gray-500 text-xs mb-2">Sub Image 3</span>
+                            <button type="button"
+                                class="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded-full hover:bg-gray-300 transition-colors pointer-events-none">Upload</button>
+                        </div>
+                        <img id="sub-image-display-3" src="{{data.images[3].url}}" alt="Sub Product Image"
+                            class=" absolute inset-0 w-full h-full object-cover rounded-lg">
+                    </div>
+                    <div
+                        class="flex flex-col items-center p-4 border-2 border-dashed border-gray-300 rounded-xl bg-gray-50 relative group">
+                        <input type="file" id="sub-image-input-4" value="{{data.images[4].url}}" name="SubImage[]"
+                            accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer z-10">
+                        <div class="flex flex-col items-center text-center">
+                            <i class="lucide lucide-image-plus w-10 h-10 text-gray-400 mb-2"></i>
+                            <span class="text-gray-500 text-xs mb-2">Sub Image 4</span>
+                            <button type="button"
+                                class="px-3 py-1 bg-gray-200 text-gray-700 text-xs rounded-full hover:bg-gray-300 transition-colors pointer-events-none">Upload</button>
+                        </div>
+                        <img id="sub-image-display-4" src="{{data.images[4].url}}" alt="Sub Product Image"
+                            class=" absolute inset-0 w-full h-full object-cover rounded-lg">
+                    </div>
+                </div>
+            </div>
+            <!-- Available Sizes Section -->
+            <div>
+                <h2 class="text-xl font-semibold text-left text-gray-800 mb-4">Available Sizes</h2>
+                <div class="flex flex-wrap gap-2">
+                    {% for size in data.sizes %}
+
+                    <label class="relative">
+                        <input type="checkbox" name="sizes[]" value="{{size.name}}" checked class="hidden peer">
+                        <span
+                            class="size-btn border border-gray-300 rounded-md px-4 py-2 peer-checked:bg-teal-600 cursor-pointer peer-checked:text-white hover:bg-gray-100 focus:outline-none">
+                            {{size.name}}
+                        </span>
+                    </label>
+                    {% endfor %}
+
+
+                    <label class="relative">
+                        <input type="checkbox" name="sizes[]" value="XXL" class="hidden peer">
+                        <span
+                            class="size-btn border border-gray-300 cursor-pointer rounded-md px-4 py-2 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-gray-100 focus:outline-none">
+                            XXL
+                        </span>
+                    </label>
+
+                    <label class="relative">
+                        <input type="checkbox" name="sizes[]" value="XXXL" class="hidden peer">
+                        <span
+                            class="size-btn border border-gray-300 cursor-pointer rounded-md px-4 py-2 peer-checked:bg-teal-600 peer-checked:text-white hover:bg-gray-100 focus:outline-none">
+                            XXXL
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Available Colors Section -->
+            <div>
+                <h2 class="text-xl font-semibold text-left text-gray-800 mb-4">Available Colors</h2>
+                <div class="flex flex-wrap gap-4">
+                    {% for color in data.colors %}
+
+                    <label class="flex flex-col items-center cursor-pointer">
+                        <input type="checkbox" checked name="colors[]" value="{{color.name}}" class="hidden peer">
+                        <div class="color-circle w-8 h-8 rounded-full border-2 border-transparent peer-checked:border-green-600 selected"
+                            style="background-color: {{color.name}};"></div>
+                        <span class="text-xs mt-1">{{color.name}}</span>
+                    </label>
+                    {% endfor %}
+
+                </div>
+
+                <!-- Text Inputs -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="productName" class="block text-gray-700 font-medium mb-2">Product
+                            Name</label>
+                        <input type="text" id="productName"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600"
+                            value="{{data.variant[0].Name}}" name="pname" placeholder="Product Name">
+                    </div>
+                    <div>
+                        <label for="discountedPrice" class="block text-gray-700 font-medium mb-2">Discounted
+                            Price
+                            (₹)</label>
+                        <input type="number" id="discountedPrice" value="{{data.variant[0].Discounted_Price}}"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600"
+                            name="dprice" placeholder="Discounted Price (₹)">
+                    </div>
+                    <div>
+                        <label for="originalPrice" class="block text-gray-700 font-medium mb-2">Original Price
+                            (₹)</label>
+                        <input type="number" id="originalPrice" value="{{data.variant[0].Original_Price}}"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600"
+                            name="oprice" placeholder="Original Price (₹)">
+                    </div>
+                    <div>
+                        <label for="sku" class="block text-gray-700 font-medium mb-2">SKU</label>
+                        <input type="text" name="sku" id="sku" value="{{data.variant[0].SKU}}"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600"
+                            placeholder="SKU">
+                    </div>
+                </div>
+
+                <!-- Product Description -->
+                <div>
+                    <h2 class="text-xl font-semibold text-left text-gray-800 mb-4">Product Description</h2>
+                    <textarea id="productDescription" rows="4" name="description"
+                        class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600"
+                        placeholder="Enter product description...">{{data.variant[0].Description}}</textarea>
+                </div>
+
+                <!-- Product Features -->
+                <div class="col-span-1 sm:col-span-2">
+                    <h2 class="text-xl font-semibold text-left text-gray-800 mb-4">Product Features</h2>
+
+                    <div class="mt-2 flex gap-2">
+                        <input type="text" id="new-feature" placeholder="e.g., Breathable fabric"
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:outline-none">
+                        <button type="button" id="add-feature-btn"
+                            class="bg-teal-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                            Add
+                        </button>
+                    </div>
+                    <ul id="features-list" class="mt-4 space-y-2">
+
+
+
+                    </ul>
+                    <input type="hidden" id="product-features" name="features[]">
+
+
+                </div>
+
+                <!-- Availability and Ratings -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="availability" class="block text-gray-700 font-medium mb-2">Available</label>
+                        <select id="availability" name="available"
+                            class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-600">
+                            <option value="Yes" selected>Yes</option>
+                            <option value="No">No</option>
+                        </select>
+                    </div>
+                    <!-- Ratings Section -->
+                    <div>
+                        <h2 class="text-xl font-semibold text-gray-800 mb-4">Ratings</h2>
+                        <div class="flex mx-48 items-center gap-2" id="rating-stars">
+                            {% set remaining_stars = 5 - data.variant[0].Ratings | int %}
+                            {% for r in range(data.variant[0].Ratings | int) %}
+
+                            <i class="fa-regular fa-star text-yellow-400 cursor-pointer" data-rating="{{r}}"></i>
+                            {% endfor %}
+                            {% for remaining_star in range(remaining_stars) %}
+                            <i class="fa-regular fa-star text-gray-400 cursor-pointer" data-rating="5"></i>
+                            {% endfor %}
+                            <span class="text-gray-500 ml-2" id="rating-value">{{data.variant[0].Ratings |
+                                int}}/5</span>
+                            <input type="hidden" id="ratingsInput" name="ratings"
+                                value="{{data.variant[0].Ratings | int}}">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex justify-end space-x-4 pt-6">
+                    <button type="reset"
+                        class="bg-gray-400 text-white font-medium py-3 px-6 rounded-lg hover:bg-gray-500 transition-colors">
+                        Reset Form
+                    </button>
+                    <button type="submit"
+                        class="bg-teal-600 text-white font-medium py-3 px-6 rounded-lg hover:bg-teal-700 transition-colors">
+                        Update Product
+                    </button>
+                </div>
+        </form>
+    </div>
+</main>
+
+
+
+
+
+
+<!-- JavaScript for button interactivity -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Storing Product Features information when page is loaded 
+        let features = [];
+        {% for f in data.feature %}
+        features.push("{{ f.feature }}");
+        {% endfor %}
+        console.log(features);
+        // Function to handle dynamic product features
+        const featuresList = document.getElementById('features-list');
+        const featureInput = document.getElementById("product-features")
+
+        function renderFeaturesList(flag = 0) {
+            if (flag === 1) {
+                featuresList.innerHTML = ""
+            }
+            features.forEach((feature, index) => {
+                const li = document.createElement('li');
+                li.classList.add('flex', 'items-center', 'justify-between', 'bg-gray-50', 'p-3', 'rounded-lg', 'border', 'border-gray-200');
+                li.innerHTML = `
+                        <span>${feature}</span>
+                        <button type="button" class="remove-feature text-red-500 hover:text-red-700" data-index="${index}">
+                            <svg class="size-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    `;
+                featuresList.appendChild(li);
+
+            });
+            featureInput.value = features
+
+            attachRemoveListener()
+
+        }
+
+
+        renderFeaturesList()
+
+
+        // Function to handle size button clicks
+        document.querySelectorAll('.size-button').forEach(button => {
+            button.addEventListener('click', () => {
+                button.classList.toggle('bg-gray-300');
+                button.classList.toggle('text-white');
+                button.classList.toggle('shadow-md');
+                button.classList.toggle('hover:bg-gray-300');
+            });
+        });
+
+        // Color selection
+        const colorCircles = document.querySelectorAll('.color-circle');
+        colorCircles.forEach(circle => {
+            circle.addEventListener('click', function () {
+                this.classList.toggle('selected');
+                this.checked = false
+            });
+        });
+
+
+        // Function to handle ratings
+        const ratingContainer = document.getElementById('rating-stars');
+        const ratingValueSpan = document.getElementById('rating-value');
+        const ratingInput = document.getElementById("ratingsInput")
+        const stars = Array.from(ratingContainer.querySelectorAll('i'));
+        let currentRating = ratingValueSpan.textContent.slice(0, 1);
+        console.log(currentRating);
+
+
+
+        stars.forEach(star => {
+            star.addEventListener('mouseover', function () {
+                const rating = this.getAttribute('data-rating');
+                highlightStars(rating);
+            });
+
+            star.addEventListener('mouseout', function () {
+                highlightStars(currentRating);
+            });
+
+            star.addEventListener('click', function () {
+                currentRating = this.getAttribute('data-rating');
+                currentRating = currentRating + 1
+                ratingValueSpan.textContent = `${currentRating}/5`;
+                ratingInput.value = currentRating
+
+                highlightStars(currentRating);
+            });
+        });
+
+        function highlightStars(rating) {
+            stars.forEach(star => {
+                const starRating = star.getAttribute('data-rating');
+                if (starRating <= rating) {
+                    star.classList.remove('text-gray-300');
+                    star.classList.add('text-yellow-400');
+                } else {
+                    star.classList.remove('text-yellow-400');
+                    star.classList.add('text-gray-300');
+                }
+            });
+        }
+
+
+        function attachRemoveListener() {
+
+
+            document.querySelectorAll('.remove-feature').forEach(button => {
+                button.addEventListener('click', (event) => {
+
+                    const indexToRemove = event.currentTarget.dataset.index;
+                    console.log(indexToRemove);
+                    features.splice(indexToRemove, 1);
+                    productFeaturesInput.value = JSON.stringify(features);
+                    let flag = 1
+                    renderFeaturesList(flag);
+                });
+            });
+        }
+
+        // Product features functionality
+        const newFeatureInput = document.getElementById('new-feature');
+        const addFeatureBtn = document.getElementById('add-feature-btn');
+        const productFeaturesInput = document.getElementById('product-features');
+        addFeatureBtn.addEventListener('click', () => {
+
+            const featureText = newFeatureInput.value.trim();
+            if (featureText) {
+                features.push(featureText);
+                productFeaturesInput.value = JSON.stringify(features);
+                const flag = 1
+                renderFeaturesList(flag);  // Displaying entered values in the list
+                newFeatureInput.value = '';
+
+            }
+        });
+
+
+
+
+        // Functionality for image uploads
+        const mainImageInput = document.getElementById('main-image-input');
+        const mainImageDisplay = document.getElementById('main-image-display');
+        const mainImagePreview = document.getElementById('main-image-preview');
+
+        mainImageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    mainImageDisplay.src = e.target.result;
+                    mainImageDisplay.classList.remove('hidden');
+                    mainImagePreview.classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        const subImageInputs = [
+            document.getElementById('sub-image-input-1'),
+            document.getElementById('sub-image-input-2'),
+            document.getElementById('sub-image-input-3'),
+            document.getElementById('sub-image-input-4')
+        ];
+
+        const subImageDisplays = [
+            document.getElementById('sub-image-display-1'),
+            document.getElementById('sub-image-display-2'),
+            document.getElementById('sub-image-display-3'),
+            document.getElementById('sub-image-display-4')
+        ];
+
+        subImageInputs.forEach((input, index) => {
+            input.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        subImageDisplays[index].src = e.target.result;
+                        subImageDisplays[index].classList.remove('hidden');
+                        input.previousElementSibling.classList.add('hidden');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock body %} <!-- Main Content Area -->

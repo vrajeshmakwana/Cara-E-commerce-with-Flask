@@ -1,0 +1,101 @@
+<link rel="stylesheet" href="/static/css/settings.css">
+{% extends 'inheritance.html' %}
+
+{% block body %}
+
+
+
+
+
+
+
+
+<div class="settings-container">
+    <!-- Account Settings -->
+    <section class="settings-section">
+        <h2>Account Settings</h2>
+        <div class="settings-card">
+            <div class="settings-item">
+                <h3>Email Notifications</h3>
+                <p>Manage your email preferences</p>
+                <div class="settings-controls">
+                    <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="settings-item">
+                <h3>Order Updates</h3>
+                <p>Get notifications about your orders</p>
+                <div class="settings-controls">
+                    <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="settings-item">
+                <h3>Marketing Emails</h3>
+                <p>Receive offers and promotions</p>
+                <div class="settings-controls">
+                    <label class="toggle">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Settings -->
+    <section class="settings-section">
+        <h2>Privacy Settings</h2>
+        <div class="settings-card">
+            <div class="settings-item">
+                <h3>Profile Visibility</h3>
+                <p>Control who can see your profile</p>
+                <div class="settings-controls">
+                    <select name="profileControl" class="settings-select">
+                        <option>Public</option>
+                        <option>Private</option>
+                        <option>Friends Only</option>
+                    </select>
+                </div>
+            </div>
+            <div class="settings-item">
+                <h3>Two-Factor Authentication</h3>
+                <p>Add an extra layer of security</p>
+                <div class="settings-controls">
+                    <label class="toggle">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Settings -->
+    <section class="settings-section">
+        <h2>Payment Methods</h2>
+        <div class="settings-card">
+            <div class="payment-methods">
+                <div class="payment-method">
+                    <div class="card-info">
+                        <span class="card-icon">💳</span>
+                        <div class="card-details">
+                            <h4>•••• •••• •••• 4242</h4>
+                            <p>Expires 12/25</p>
+                        </div>
+                    </div>
+                    <button class="btn-remove">Remove</button>
+                </div>
+                <button class="btn-add">+ Add New Payment Method</button>
+            </div>
+        </div>
+    </section>
+</div>
+</main>
+</div>
+{% endblock %}

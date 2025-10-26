@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional PDF Table</title>
+
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Admin Logs Report 2025</h1>
+            <p>Quarterly Analysis Overview - Q3 2025</p>
+        </div>
+
+        <div class="table-wrapper">
+            <table>
+                <tbody>
+                    {% for log in logs %}
+                    {% if loop.first %}
+
+                    <tr>
+                        <th>Current DateTime</th>
+                        <th>Device</th>
+                        <th>Browser</th>
+                        <th>Action</th>
+                        <th>Target</th>
+                        <th>Status</th>
+                        <th>Location</th>
+                    </tr>
+
+                    {% endif %}
+
+                    <tr>
+                        {% set data = log.split("|") %}
+                        <td>{{data[1]}}</td>
+                        <td>{{data[2]}}</td>
+                        <td>{{data[3]}}</td>
+                        <td>{{data[4]}}</td>
+                        <td>{{data[5]}}</td>
+                        <td><span class="status active">{{data[6]}}</span></td>
+                        <td>{{data[7]}}</td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+        </div>
+
+        <div class="footer">
+            <p><strong>Generated on:</strong> October 19, 2025 | <strong>Confidential Document</strong></p>
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,171 @@
+<link rel="stylesheet" href="/static/css/userorder.css">
+{% extends 'inheritance.html' %}
+{% block body %}
+
+
+
+<div class="dashboard-container1">
+    <header class="dashboard">
+        <h1>My Orders</h1>
+        <p class="subtitle">Track and manage your recent purchases</p>
+    </header>
+
+    <div class="filter-container">
+        <div class="search-wrapper1">
+            <input type="text" id="orderSearch" placeholder="Search by product name or order ID" class="search-input">
+            <button id="searchBtn" class="search-button">Search</button>
+        </div>
+
+        <div class="filter-wrapper">
+            <div class="filter-label">Filter by status:</div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-status="all">All</button>
+                <button class="filter-btn" data-status="pending">Pending</button>
+                <button class="filter-btn" data-status="shipped">Shipped</button>
+                <button class="filter-btn" data-status="delivered">Delivered</button>
+                <button class="filter-btn" data-status="cancelled">Cancelled</button>
+            </div>
+
+            <div class="filter-dropdown-wrapper">
+                <select id="statusFilter" class="status-dropdown">
+                    <option value="all">All Orders</option>
+                    <option value="pending">Pending</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="results-info">
+        <span id="resultCount">Showing all orders</span>
+        <button id="clearFilters" class="clear-filters-btn">Clear filters</button>
+    </div>
+    <!-- single product card code
+     
+     -->
+    <!--  -->
+
+    <div class="orders-container" id="ordersContainer">
+
+
+
+        <div class="order-card">
+            <div class="order-header">
+                <div>
+                    <div class="order-id">ORD-2023-7492</div>
+                    <div class="order-date">June 2, 2023</div>
+                </div>
+
+
+
+
+            </div>
+            <div class="order-product"><img class="product-image"
+                    src="https://images.unsplash.com/photo-1546868871-7041f2a55e12?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=300&amp;q=80"
+                    alt="Smart Watch Series 5">
+                <div class="product-details">
+                    <div class="product-name1">Smart Watch Series 5</div>
+                    <div class="product-price">$199.99</div>
+                    <div class="product-quantity">Quantity: 1</div>
+                </div>
+            </div>
+            <div class="order-product"><img class="product-image"
+                    src="https://images.unsplash.com/photo-1631281956016-3cdc1b2fe5fb?ixlib=rb-4.0.3&amp;ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&amp;auto=format&amp;fit=crop&amp;w=300&amp;q=80"
+                    alt="Watch Charging Dock">
+                <div class="product-details">
+                    <div class="product-name1">Watch Charging Dock</div>
+                    <div class="product-price">$29.99</div>
+                    <div class="product-quantity">Quantity: 1</div>
+                </div>
+            </div>
+            <div class="order-footer">
+                <div class="order-total">Total: $229.98</div>
+                <div class="order-actions"> <a href="/order_status">
+                        <button class="action-btn btn-primary">View Details</button>
+                    </a>
+                    <button class="action-btn btn-secondary">Track Order</button>
+                </div>
+            </div>
+        </div>
+
+        {% for orderID, products in orders_cluster.items() %}
+        {% if products| length == 1 %}
+        <div class="order-card" id="Single_Order">
+            <div class="order-header">
+                <div>
+                    <div class="order-id">{{orderID}}</div>
+                    <div class="order-date">May 15, 2023</div>
+                </div>
+
+                <div class="status-badge status-{{products[0].OrderStatus}}">{{products[0].OrderStatus | capitalize}}
+                </div>
+            </div>
+            <div class="order-product"><img class="product-image" src="{{products[0].Product_Image}}"
+                    alt="Wireless Bluetooth Headphones">
+                <div class="product-details">
+                    <div class="product-name1">{{products[0].Product_Name}}</div>
+                    <div class="product-price">₹{{products[0].Product_Price | round(2)}}</div>
+                    <div class="product-quantity">Quantity: {{products[0].Quantity}}</div>
+                </div>
+            </div>
+            <div class="order-footer">
+                <div class="order-total">Total: ₹{{products[0].Product_Price | round(2)}}</div>
+                <div class="order-actions">
+                    <a href="/order_status/{{orderID}}">
+                        <button class="action-btn btn-primary">View Details</button>
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="order-card">
+            <div class="order-header">
+                <div>
+                    <div class="order-id">{{orderID}}</div>
+                    <div class="order-date">May 15, 2023</div>
+                </div>
+                <div class="status-badge status-{{products[0].OrderStatus}}">{{products[0].OrderStatus| capitalize}}
+                </div>
+            </div>
+            {% set ns = namespace(t=0) %}
+            {% for product in products %}
+
+
+            <div class="order-product">
+                <img class="product-image" src="{{product.Product_Image}}" alt="Wireless Bluetooth Headphones">
+                <div class="product-details">
+                    <div class="product-name1">{{product.Product_Name}}</div>
+                    <div class="product-price">₹ {{product.Product_Price | round(2)}} </div>
+                    <div class="product-quantity">Quantity: {{product.Quantity}}</div>
+                    {% set ns.t = ns.t + product.Product_Price * product.Quantity %}
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="order-footer">
+                <div class="order-total">Total: ₹{{ns.t | round(2)}}</div>
+                <div class="order-actions">
+                    <a href="/order_status/{{orderID}}">
+                        <button class="action-btn btn-primary">View Details</button>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        {% endif %}
+
+        {% endfor %}
+
+        <div id="noResults" class="no-results hidden">
+            <p>No orders match your search criteria</p>
+            <button id="resetSearch" class="reset-search-btn">Reset filters</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="/static/js/order.js"></script>
+
+{% endblock %}

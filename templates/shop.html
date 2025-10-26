@@ -1,0 +1,77 @@
+{% extends 'inheritance.html' %}
+{% block body %}
+<style>
+    .container12 {
+        display: flex;
+    }
+
+    .PaginationBtn.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+
+
+
+    @media (max-width:1024px) {
+        .container12 {
+            justify-content: center;
+            flex-wrap: wrap;
+            /* flex-direction: column; */
+        }
+    }
+</style>
+<section id="page-header">
+    <h2>#Stayhome</h2>
+    <p>Save more with coupons &amp; up to 70% off!</p>
+</section>
+<!-- ================== Product Section Starts =================== -->
+<section id="product1" class="section-p1">
+    <h2>Our Products</h2>
+    <p>Summer Collection New Modern Design</p>
+    <div class="container12">
+
+        {% for product in products %}
+
+        <div class="pro" style="margin-right: 2rem;">
+            <img src="{{product.Product_Image}}" alt="Error">
+            <div class="des">
+                <span>addidas</span>
+
+                <div class="stock-badge">In Stock</div>
+
+
+                <h5>{{product.Product_name}}</h5>
+                <div class="star">
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                    <i class="ri-star-fill"></i>
+                </div>
+                <h4>₹{{product.Product_Price| round(2)}}</h4>
+            </div>
+            <a href="#"><i class="ri-shopping-cart-line" onclick="AddToCart(this,'1')"
+                    data-product-id="{{product.Product_ID}}" data-user-id="1"
+                    data-product-image="{{product.Product_Image}}" data-product-name="{{product.Product_name}}"
+                    data-product-price="{{product.Product_Price| round(2)}}" data-product-quantity="1"
+                    id="cart"></i></a>
+        </div>
+        {% endfor %}
+    </div>
+
+
+</section>
+<!-- ================ Pagination starts here -->
+<section id="pagination" class="section-p1">
+
+
+
+    <a href="{{prev}}" style="margin-right: 10px;" class="PaginationBtn {% if prev == '#' %} disabled {% endif %}"><i
+            class="ri-arrow-left-line"></i> Previous
+    </a>
+    <a class="PaginationBtn {% if next == '#' %} disabled {% endif %}" href="{{next}}">Next <i
+            class="ri-arrow-right-line"></i></a>
+</section>
+<!-- ================ Pagination ends here -->
+{% endblock body %}

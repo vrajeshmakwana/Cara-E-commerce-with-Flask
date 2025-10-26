@@ -1,0 +1,23 @@
+{% if data%}
+{% for pro in data %}
+
+<a href="/dashboard/{{token}}/product/{{pro.Product_ID}}">
+    <div class="autocomplete-item">
+        <img src="{{pro.Product_Image}}" alt="Blue Printed T-Shirt">
+        <div class="product-details">
+            <span class="product-name">{{pro.Product_name}}</span>
+            <span class="product-price">₹{{pro.Product_Price | round(2)}}</span>
+        </div>
+    </div>
+</a>
+{% endfor %}
+{% else %}
+<div class="autocomplete-item">
+    <div class="product-details">
+
+        <p>No results found</p>
+    </div>
+
+</div>
+
+{% endif %}
